@@ -7,7 +7,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use(cors())
 
-app.get('', (request: Request, response: Response) => {
+app.get('/recados', (request: Request, response: Response) => {
     const {...recados} = request.query
     
 })
