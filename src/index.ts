@@ -7,9 +7,17 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use(cors())
 
-app.get('/recados', (request: Request, response: Response) => {
-    const {...recados} = request.query
+const recados: any = []
+
+app.post('/recados', (request: Request, response: Response) => {
+    const {recado} = request.body
     
+    recados.push(recado)
+    response.status(201).json({
+        mensagem: "Recado adicionado",
+        item: recado,
+        recados
+    })
 })
 
 app.listen(4040, () => {
