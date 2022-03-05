@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
+import { request } from 'http'
 
 const app = express()
 
@@ -26,8 +27,8 @@ app.post('/recados', (request: Request, response: Response) => {
 
 app.get('/recados', (request: Request, response: Response) => {
     return response.json({
-        detalhes: rDetalhes,
-        descricao: rDescricao
+        rDetalhes,
+        rDescricao
     })
 })
 
@@ -43,7 +44,25 @@ app.get('/recados/detalhes/:index', (request: Request, response: Response) => {
     return response.json(rDetalhes[index])
 })
 
+app.put('/recados/descricao/:index', (request: Request, response: Response) => {
+    const { index } = request.params
+    const { descricao } = request.body
 
+    rDescricao[index] = descricao
+
+    return response.json(rDescricao)
+})
+
+app.put('/recados/detalhes/:index', (request: Request, response: Response) => {
+    const { index } = request.params
+    const { detalhes } = request.body
+
+    rDescricao[index] = detalhes
+
+    return response.json(rDetalhes)
+})
+
+app.delete('/recados/descricao/')
 
 app.listen(4040, () => {
     console.log('servidor rodando')
