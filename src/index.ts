@@ -62,7 +62,21 @@ app.put('/recados/detalhes/:index', (request: Request, response: Response) => {
     return response.json(rDetalhes)
 })
 
-app.delete('/recados/descricao/')
+app.delete('/recados/descricao/:index', (request: Request, response: Response) => {
+    const { index } = request.params
+
+    rDescricao.splice(rDescricao[index], 1)
+
+    return response.json(rDescricao)
+})
+
+app.delete('/recados/detalhes/:index', (request: Request, response: Response) => {
+    const { index } = request.params
+
+    rDetalhes.splice(rDetalhes[index], 1)
+
+    return response.json(rDetalhes)
+})
 
 app.listen(4040, () => {
     console.log('servidor rodando')
