@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
-import { request } from 'http'
+import { errands } from './data/data'
+import { getRandomInt } from './helpers/generateId'
+import { midVerifyFields, midVerifyId } from './middlewares/routesMiddlewares'
 
 const app = express()
 
@@ -8,74 +10,60 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use(cors())
 
-const rDescricao: any = []
-const rDetalhes: any = []
+app.get('/errands', (request: Request, response: Response) => {
+    return response.status(200).json({
+        msg: "All errands",
+        errands
+    })
+})
 
-app.post('/recados', (request: Request, response: Response) => {
-    const {descricao, detalhes} = request.body
-    
-    rDetalhes.push(detalhes)
-    rDescricao.push(descricao)
+app.post('/errands', midVerifyFields, (request: Request, response: Response) => {
+    const { description, detail } = request.body
+
+    const newErrand = {
+        id: getRandomInt(0, 100),
+        description,
+        detail
+    }
+
+    errands.push(newErrand)
+
     return response.status(201).json({
-        mensagem: "Recado adicionado",
-        decricao: descricao,
-        detalhes: detalhes,
-        rDetalhes,
-        rDescricao
+        msg: "Success",
+        item: newErrand,
+        errands
     })
 })
 
-app.get('/recados', (request: Request, response: Response) => {
-    return response.json({
-        rDetalhes,
-        rDescricao
+app.delete('/errands/:id', midVerifyId, (request: Request, response: Response) => {
+    const { id } = request.params
+
+    const item = errands.findIndex((f: { id: number }) => parseInt(id) === f.id)
+
+    errands.splice(item, 1)
+
+    return response.status(200).json({
+        msg: "Success",
+        errands
     })
 })
 
-app.get('/recados/descricao/:index', (request: Request, response: Response) => {
-    const { index } = request.params
+app.put('/errands/:id', midVerifyId, midVerifyFields, (request: Request, response: Response) => {
+    const { id } = request.params
+    const { description, detail } = request.body
 
-    return response.json(rDescricao[index])
-})
+    const item = errands.find((f) => parseInt(id) === f.id)
 
-app.get('/recados/detalhes/:index', (request: Request, response: Response) => {
-    const { index } = request.params
+    if (item) {
+        item.description = description
+        item.detail = detail
+    }
 
-    return response.json(rDetalhes[index])
-})
-
-app.put('/recados/descricao/:index', (request: Request, response: Response) => {
-    const { index } = request.params
-    const { descricao } = request.body
-
-    rDescricao[index] = descricao
-
-    return response.json(rDescricao)
-})
-
-app.put('/recados/detalhes/:index', (request: Request, response: Response) => {
-    const { index } = request.params
-    const { detalhes } = request.body
-
-    rDescricao[index] = detalhes
-
-    return response.json(rDetalhes)
-})
-
-app.delete('/recados/descricao/:index', (request: Request, response: Response) => {
-    const { index } = request.params
-
-    rDescricao.splice(rDescricao[index], 1)
-
-    return response.json(rDescricao)
-})
-
-app.delete('/recados/detalhes/:index', (request: Request, response: Response) => {
-    const { index } = request.params
-
-    rDetalhes.splice(rDetalhes[index], 1)
-
-    return response.json(rDetalhes)
+    return response.status(200).json({
+        msg: "Success",
+        item,
+        errands
+    })
 })
 
 app.listen(4040, () => {
