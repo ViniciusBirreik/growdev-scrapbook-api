@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
 import { errands } from './data/data'
-import { getRandomInt } from './helpers/generateId'
-import { midVerifyFields, midVerifyId } from './middlewares/routesMiddlewares'
+import { getRandomInt } from './helpers/generated'
+import { midVerifyFields, midVerifyId } from './middlewares/midleware'
 
 const app = express()
 
