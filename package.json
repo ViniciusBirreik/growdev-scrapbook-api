@@ -19,7 +19,7 @@
     "express": "^4.17.3"
   },
   "scripts": {
-    "build": "yarn tsc",
+    "build": "tsc",
     "start": "node index.js",
     "dev": "ts-node-dev --respawn --transpile-only ./src/index"
   }
