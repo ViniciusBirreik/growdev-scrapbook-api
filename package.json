@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "yarn tsc",
-    "start": "node ./dist",
+    "start": "node index.js",
     "dev": "ts-node-dev --respawn --transpile-only ./src/index"
   }
 }
